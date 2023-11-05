@@ -25,6 +25,14 @@ const managerSchema = new mongoose.Schema({
     unique: true,
     trim: true,
   },
+
+  assignedTickets: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Ticket",
+      default: [],
+    },
+  ],
 });
 
 // Create a Manager model

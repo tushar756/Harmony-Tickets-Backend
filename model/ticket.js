@@ -27,6 +27,17 @@ const ticketSchema = new mongoose.Schema({
     enum: ["High", "Medium", "Low"],
     required: true,
   },
+  assignedTo: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Staff",
+    default: null,
+  },
+
+  assignedBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Manager",
+    default: null,
+  },
 });
 
 const Ticket = mongoose.model("Ticket", ticketSchema);
