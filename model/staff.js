@@ -24,6 +24,13 @@ const staffSchema = new mongoose.Schema({
     unique: true,
     trim: true,
   },
+  tickedId: [
+    {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Ticket",
+      default: [],
+    },
+  ],
 });
 
 const staff = mongoose.model("Staff", staffSchema);
