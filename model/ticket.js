@@ -33,7 +33,7 @@ const ticketSchema = new mongoose.Schema({
     default: null,
   },
 
-  assignedBy: {
+  createdBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Manager",
     default: null,
