@@ -54,11 +54,11 @@ const createManager = async (req, res) => {
 const createStaff = async (req, res) => {
   try {
     // Extract staff data from the request body
-    const { firstName, lastName, email, phone_number, managerId } = req.body;
+    const { name, email, password } = req.body;
 
     // Check if the staff member with the given email or phone_number already exists
     const existingStaff = await Staff.findOne({
-      $or: [{ email }, { phone_number }],
+      email,
     });
     if (existingStaff) {
       return res.status(400).json({
@@ -70,11 +70,9 @@ const createStaff = async (req, res) => {
 
     // Create a new staff member instance
     const staffMember = new Staff({
-      firstName,
-      lastName,
+      name,
       email,
-      phone_number,
-      managerId,
+      password,
     });
 
     // Save the staff member to the database
@@ -87,7 +85,6 @@ const createStaff = async (req, res) => {
       message: "Staff member created successfully",
     });
   } catch (error) {
-    // Handle any errors that occur during the process
     console.error(error);
     res.status(500).json({
       error: true,
@@ -96,55 +93,51 @@ const createStaff = async (req, res) => {
   }
 };
 
-const assignTicket = async (req, res) => {
+const createTicket = async (req, res) => {
   try {
-    const { staffId } = req.params;
-
-    // Check if the staff member with the provided ID exists
-    const staffMember = await Staff.findById(staffId);
-
-    console.log(staffMember);
-
-    if (!staffMember) {
-      return res.status(404).json({ error: "Staff member not found" });
-    }
-
     // Extract ticket data from the request body
-    const { ticketId } = req.body;
+    const { title, media_url, description, priority, name } = req.body;
 
-    if (staffMember.tickedId) {
-      return res
-        .status(400)
-        .json({ error: "Staff member is already assigned a ticket" });
-    }
+    // random four digit number
+    const ticketId = Math.floor(1000 + Math.random() * 9000);
 
-    // Create a new ticket instance and assign it to the staff member
-    console.log(ticketId);
-    const ticket = await Ticket.findById(ticketId);
-
-    console.log(ticket);
-
-    if (!ticket) {
+    // Check if the ticket with the given ticketId already exists
+    const existingTicket = await Ticket.findOne({
+      ticketId,
+    });
+    if (existingTicket) {
       return res.status(400).json({
         error: true,
-        message: "Ticket not found",
+        message: "Ticket with the given ticketId already exists",
       });
     }
-    const { priority, title, description, media_url } = ticket;
 
-    const newTicket = await Ticket.create({
-      priority,
-      title,
-      description,
-      media_url,
-      assignedTo: staffId,
+    const staffMember = await Staff.findOne({
+      name,
     });
+    console.log(staffMember);
+    staffMember.tickets = ticketId;
+
+    await staffMember.save();
+
+    // Create a new ticket instance
+    const ticket = new Ticket({
+      title,
+      media_url,
+      description,
+      priority,
+      ticketId,
+      currentAssignedTo: staffMember,
+    });
+
+    // Save the ticket to the database
+    await ticket.save();
 
     // Return a success response
     res.status(201).json({
       error: false,
-      data: newTicket,
-      message: "Ticket created and assigned successfully",
+      data: ticket,
+      message: "Ticket created successfully",
     });
   } catch (error) {
     // Handle any errors that occur during the process
@@ -159,5 +152,6 @@ const assignTicket = async (req, res) => {
 module.exports = {
   createManager,
   createStaff,
-  assignTicket,
+  // assignTicket,
+  createTicket,
 };

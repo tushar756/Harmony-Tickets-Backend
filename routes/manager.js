@@ -9,13 +9,13 @@ const managerRoute = Router();
 const {
   createManager,
   createStaff,
-  assignTicket,
+  createTicket,
 } = require("../controller/manager.js");
 
 managerRoute.post("/create-manager", createManager);
 
 managerRoute.post("/create-staff", createStaff);
 
-managerRoute.put("/assign-ticket/:staffId", assignTicket);
+managerRoute.post("/create-ticket", createTicket);
 
 module.exports = managerRoute;
