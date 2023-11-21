@@ -1,12 +1,7 @@
 const mongoose = require("mongoose");
 
 const staffSchema = new mongoose.Schema({
-  firstName: {
-    type: String,
-    required: true,
-    trim: true,
-  },
-  lastName: {
+  name: {
     type: String,
     required: true,
     trim: true,
@@ -17,21 +12,19 @@ const staffSchema = new mongoose.Schema({
     unique: true,
     trim: true,
   },
-
-  phone_number: {
-    type: Number,
+  password: {
+    type: String,
     required: true,
-    unique: true,
     trim: true,
   },
-  tickedId: {
-    type: mongoose.Schema.Types.ObjectId,
+  // managerId: {
+  //   type: mongoose.Schema.Types.ObjectId,
+  //   ref: "Manager",
+  //   default: null,
+  // },
+  ticketId: {
+    type: String,
     ref: "Ticket",
-    default: null,
-  },
-  managerId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Manager",
     default: null,
   },
 });

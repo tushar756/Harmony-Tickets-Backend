@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const Staff = require("./staff.js");
 
 const ticketSchema = new mongoose.Schema({
   title: {
@@ -14,30 +15,21 @@ const ticketSchema = new mongoose.Schema({
     required: true,
     trim: true,
   },
-  assignDate: {
-    type: Date,
-    default: null,
-  },
-  expiryDate: {
-    type: Date,
-    default: null,
-  },
   priority: {
     type: String,
-    enum: ["High", "Medium", "Low"],
+    enum: ["High", "Mid", "Low"],
     required: true,
   },
-  assignedTo: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Staff",
-    default: null,
+  currentAssignedTo: {},
+  ticketId: {
+    type: Number,
+    required: true,
   },
-
-  createdBy: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Manager",
-    default: null,
+  status: {
+    type: Number,
+    default: 0, // 0 pending 1 resolve
   },
+  transition: [],
 });
 
 const Ticket = mongoose.model("Ticket", ticketSchema);
