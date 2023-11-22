@@ -96,8 +96,8 @@ const createStaff = async (req, res) => {
 const createTicket = async (req, res) => {
   try {
     // Extract ticket data from the request body
-    const { title, media_url, description, priority, name } = req.body;
-
+    const { title, media_url, description, priority, assignedTo,Bug_Status} = req.body;
+    console.log(req.body)
     // random four digit number
     const ticketId = Math.floor(1000 + Math.random() * 9000);
 
@@ -113,7 +113,7 @@ const createTicket = async (req, res) => {
     }
 
     const staffMember = await Staff.findOne({
-      name,
+      name:assignedTo
     });
     console.log(staffMember);
     staffMember.tickets = ticketId;
@@ -128,6 +128,7 @@ const createTicket = async (req, res) => {
       priority,
       ticketId,
       currentAssignedTo: staffMember,
+      Bug_Status
     });
 
     // Save the ticket to the database

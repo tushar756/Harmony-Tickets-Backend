@@ -7,9 +7,6 @@ const ticketSchema = new mongoose.Schema({
     required: true,
     trim: true,
   },
-  media_url: {
-    type: String,
-  },
   description: {
     type: String,
     required: true,
@@ -20,14 +17,18 @@ const ticketSchema = new mongoose.Schema({
     enum: ["High", "Mid", "Low"],
     required: true,
   },
+  Bug_Status: {
+    type: String,
+    enum: ["open", "close/resoved", "pending"],
+    required: true,
+  },
   currentAssignedTo: {},
+  media_url: {
+    type: String,
+  },
   ticketId: {
     type: Number,
     required: true,
-  },
-  status: {
-    type: Number,
-    default: 0, // 0 pending 1 resolve
   },
   transition: [],
 });
