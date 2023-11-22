@@ -27,6 +27,10 @@ const staffSchema = new mongoose.Schema({
     ref: "Ticket",
     default: null,
   },
+  role: {
+    type: Number,
+    default: 1, // 2 - staff, 1 - manager
+  },
 });
 
 const staff = mongoose.model("Staff", staffSchema);

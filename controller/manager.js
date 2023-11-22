@@ -63,8 +63,7 @@ const createStaff = async (req, res) => {
     if (existingStaff) {
       return res.status(400).json({
         error: true,
-        message:
-          "Staff member with the given email or phone_number already exists",
+        message: "Staff member with the given email already exists",
       });
     }
 
