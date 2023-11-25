@@ -1,23 +1,27 @@
+const Manager = require("../model/manager");
 const Staff = require("../model/staff");
+const User = require("../model/user");
 const jwt = require("jsonwebtoken");
 const signin = async (req, res) => {
   try {
-    const { email, password } = req.body;
+    const { email, password, role } = req.body;
+    if(!email||!password || !role){
+      return res.status(401).json({error:true,
+      message:"fill all the details"
+    })
+    }
 
-    // Check if the staff member with the given email already exists
-    const existingStaff = await Staff.findOne({
-      email,
-    });
-    if (!existingStaff) {
+    const existingUser = await User.findOne({ email, role });
+    console.log(existingUser);
+    if (!existingUser) {
       return res.status(400).json({
         error: true,
-        message: "Staff member with the given email does not exists",
+        message: "User not exists",
       });
     }
 
     // Check if the password is correct
-    const isPasswordCorrect =
-      existingStaff.password === password ? true : false;
+    const isPasswordCorrect = existingUser.password === password;
     if (!isPasswordCorrect) {
       return res.status(400).json({
         error: true,
@@ -28,14 +32,12 @@ const signin = async (req, res) => {
     // Generate a token
     const token = jwt.sign(
       {
-        _id: existingStaff._id,
-        name: existingStaff.name,
-        email: existingStaff.email,
-        role: existingStaff.role,
+        _id: existingUser._id,
+        role: existingUser.role,
       },
       process.env.JWT_SECRET,
       {
-        expiresIn: "1d",
+        expiresIn: "30d",
       }
     );
 
@@ -44,11 +46,12 @@ const signin = async (req, res) => {
       error: false,
       data: {
         token,
-        staff: existingStaff,
+        user: existingUser,
       },
-      message: "Staff member signed in successfully",
+      message: "User member signed in successfully",
     });
   } catch (err) {
+    console.log(err)
     return res.status(500).json({
       error: true,
       message: "Internal server error",

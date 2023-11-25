@@ -1,87 +1,30 @@
-// const {
-//     createManager,
-//     createStaff,
-//     assignTicket,
-//   } = require("../controllers/manager.js");
-
 const Ticket = require("../model/ticket.js");
+const User = require("../model/user.js");
+const Joi = require("joi");
 
-const Staff = require("../model/staff.js");
-
-const Manager = require("../model/manager.js");
-// manager id 654a2690393725642077a366
-const createManager = async (req, res) => {
+const createUser = async (req, res) => {
+  console.log("object")
   try {
-    // Extract manager data from the request body
-    const { firstName, lastName, email, phone_number } = req.body;
+    const { error, value } = createUserValidation.validate(req.body);
+    if(error){
+      return res.status(400).json({
+        error: true,
+        message: error.message,
+      })
+    }
 
-    // Check if the manager with the given email or phone_number already exists
-    const existingManager = await Manager.findOne({
-      $or: [{ email }, { phone_number }],
-    });
-    if (existingManager) {
+    const userExist = await User.findOne({ email: value.email });
+    if (userExist) {
       return res.status(400).json({
         error: true,
         message: "Manager with the given email or phone_number already exists",
       });
     }
-
-    // Create a new manager instance
-    const manager = new Manager({
-      firstName,
-      lastName,
-      email,
-      phone_number,
-    });
-
-    // Save the manager to the database
-    await manager.save();
-
+    const createUser = await User.create({ ...value });
     return res.status(201).json({
       error: false,
-      data: manager,
-      message: "Manager created successfully",
-    });
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({
-      error: true,
-      message: "Internal server error",
-    });
-  }
-};
-
-const createStaff = async (req, res) => {
-  try {
-    // Extract staff data from the request body
-    const { name, email, password } = req.body;
-
-    // Check if the staff member with the given email or phone_number already exists
-    const existingStaff = await Staff.findOne({
-      email,
-    });
-    if (existingStaff) {
-      return res.status(400).json({
-        error: true,
-        message: "Staff member with the given email already exists",
-      });
-    }
-
-    // Create a new staff member instance
-    const staffMember = new Staff({
-      name,
-      email,
-      password,
-    });
-
-    // Save the staff member to the database
-    await staffMember.save();
-
-    // Return a success response
-    res.status(201).json({
-      error: false,
-      data: staffMember,
-      message: "Staff member created successfully",
+      data: createUser,
+      message: "User created successfully",
     });
   } catch (error) {
     console.error(error);
@@ -95,8 +38,16 @@ const createStaff = async (req, res) => {
 const createTicket = async (req, res) => {
   try {
     // Extract ticket data from the request body
-    const { title, media_url, description, priority, assignedTo,Bug_Status} = req.body;
     console.log(req.body)
+    const { error, value } = createTicketValidation.validate(req.body);
+    if(error){
+      return res.status(400).json({
+        error: false,
+        message: error.message
+      })
+    }
+
+
     // random four digit number
     const ticketId = Math.floor(1000 + Math.random() * 9000);
 
@@ -111,32 +62,23 @@ const createTicket = async (req, res) => {
       });
     }
 
-    const staffMember = await Staff.findOne({
-      name:assignedTo
-    });
-    console.log(staffMember);
-    staffMember.tickets = ticketId;
+    const staffMember = await User.findOne({ email: value.currentAssignedTo, role: "staff" });
+    // const staffMember = await User.find({});
+    console.log(staffMember)
+    if(!staffMember) throw new Error("NO STAFF MEMBER")
 
-    await staffMember.save();
-
-    // Create a new ticket instance
-    const ticket = new Ticket({
-      title,
-      media_url,
-      description,
-      priority,
-      ticketId,
-      currentAssignedTo: staffMember,
-      Bug_Status
-    });
-
-    // Save the ticket to the database
-    await ticket.save();
+    const createdTicket = await Ticket.create({ ...value, ticketId, currentAssignedTo: staffMember._id});
+    // await User.updateOne({ _id: staffMember._id },{  $push: { assignedTickets: createdTicket._id} }).populate('assignedTickets').exec();
+     await User.findByIdAndUpdate(
+      staffMember._id,
+      { $push: { assignedTickets: createdTicket._id } },
+      { new: true }
+    ).populate('assignedTickets').exec();
 
     // Return a success response
     res.status(201).json({
       error: false,
-      data: ticket,
+      data: createdTicket,
       message: "Ticket created successfully",
     });
   } catch (error) {
@@ -144,14 +86,71 @@ const createTicket = async (req, res) => {
     console.error(error);
     res.status(500).json({
       error: true,
-      message: "Internal server error",
+      message: error.message,
     });
   }
 };
 
-module.exports = {
-  createManager,
-  createStaff,
-  // assignTicket,
-  createTicket,
+const updateStaff = async(req,res)=>{
+  
+}
+const deleteStaff = async(req,res)=>{
+const {email} = req.body
+const existingStaff = await Staff.findOne({email})
+if (!existingStaff) {
+  return res.status(401).send({
+    error:true,
+    message:"You entered a Wrong id"
+  })
+}
+const response = await Staff.findByIdAndDelete({_id:existingStaff._id})
+res.status(201).send({data:response,
+message:"Staff Deleted Succesfully"
+})
+}
+
+
+const getAllStaff = async (req, res) => {
+  try {
+    const response = await User.find({ role: "staff" });
+    res.status(200).json({
+      error: false,
+      data: response,
+    });
+  } catch (error) {
+    res.status(500).json({
+      error: true,
+      message: "Internal Server Error",
+    });
+  }
 };
+
+
+module.exports = {
+  createUser,
+  getAllStaff,
+  createTicket,
+  updateStaff,
+  deleteStaff
+};
+
+
+// JOI VALIDATION
+
+const createUserValidation = Joi.object({
+  firstName: Joi.string().required(),
+  lastName: Joi.string().required(),
+  password: Joi.string().required(),
+  email: Joi.string().email().required(),
+  role: Joi.string().valid("manager", "staff").required()
+})
+
+const createTicketValidation = Joi.object({
+  title: Joi.string().required(),
+  media_url: Joi.string().required(),
+  description: Joi.string().required(),
+  priority: Joi.string().valid("High", "Mid", "Low").required(),
+  // email: Joi.string(),
+  Bug_Status:Joi.string().required(),
+  currentAssignedTo:Joi.string().required()
+})

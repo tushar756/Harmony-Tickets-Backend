@@ -18,9 +18,11 @@ const managerSchema = new mongoose.Schema({
     unique: true,
     trim: true,
   },
-
+  password: {
+    type: String,
+  },
   phone_number: {
-    type: Number,
+    type: String,
     required: true,
     unique: true,
     trim: true,
@@ -33,6 +35,8 @@ const managerSchema = new mongoose.Schema({
       default: [],
     },
   ],
+},{
+  collection: "manager",
 });
 
 // Create a Manager model

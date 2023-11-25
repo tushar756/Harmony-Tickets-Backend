@@ -1,21 +1,27 @@
 // manager creation and manager ticket creation and staff creation and manager ticket assign
 
 const { Router } = require("express");
+const roleRouteAccess = require("../middleware/role_access.js");
 
 const managerRoute = Router();
+
 
 // just create manager and staff and ticket assign to staff
 
 const {
-  createManager,
-  createStaff,
+  createUser,
   createTicket,
+  updateStaff,
+  deleteStaff,
+  getAllStaff,
 } = require("../controller/manager.js");
 
-managerRoute.post("/create-manager", createManager);
-
-managerRoute.post("/create-staff", createStaff);
+managerRoute.post("/create-user", createUser);
+managerRoute.post("/update-staff", updateStaff);
+managerRoute.post("/delete-staff", deleteStaff);
+managerRoute.get("/getAllStaff", getAllStaff);
 
 managerRoute.post("/create-ticket", createTicket);
+
 
 module.exports = managerRoute;
