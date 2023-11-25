@@ -20,7 +20,7 @@ const hasRouteAccess = (routeMethod, route, role) => {
   }
 
   const requiredRoute = `${routeMethod}::${route}`; //  POST::/manager/create-ticket
-console.log(requiredRoute);
+  console.log(requiredRoute,"hello world",role);
   if (!roleRoutes[requiredRoute]) {
     return {
       status: 400,

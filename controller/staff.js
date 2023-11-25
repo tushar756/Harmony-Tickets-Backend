@@ -2,9 +2,9 @@ const Ticket = require("../model/ticket.js");
 
 const staffTicket = async (req, res) => {
   try {
-    const { email } = req.params;
-
-    const allTicket = await Ticket.find({ assignedTo: email });
+    const { id } = req.params;
+    console.log(id);
+    const allTicket = await Ticket.find({ currentAssignedTo: id });
 
     res.send({
       error: false,

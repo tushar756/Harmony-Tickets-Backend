@@ -24,7 +24,7 @@ const ticketSchema = new mongoose.Schema({
   },
   currentAssignedTo: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
+    ref: "user",
     required: true,
   },
   media_url: {
