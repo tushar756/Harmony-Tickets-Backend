@@ -1,6 +1,6 @@
 const Ticket = require("../model/ticket.js");
 const Staff = require("../model/staff.js");
-const moment = require('moment');
+const moment = require("moment");
 const escaleticket = async (req, res) => {
   try {
     const {
@@ -12,6 +12,28 @@ const escaleticket = async (req, res) => {
       priority,
       media_url,
     } = req.body;
+
+    if (!ticketId) {
+      return res.send({
+        error: true,
+        message: "Ticket id is required",
+      });
+    }
+
+    if (
+      !assignedBy ||
+      !assignedTo ||
+      !description ||
+      !Bug_Status ||
+      !priority ||
+      !media_url
+    ) {
+      return res.send({
+        error: true,
+        message: "All fields are required",
+      });
+    }
+
     const ticket = await Ticket.findOne({
       ticketId,
     });
@@ -25,7 +47,7 @@ const escaleticket = async (req, res) => {
       });
     }
 
-    if (ticket.currentAssignedTo.name !== assignedBy) {
+    if (ticket.currentAssignedTo.email !== assignedBy) {
       return res.send({
         error: true,
         message: "You are not allowed to assign this ticket",
@@ -33,11 +55,11 @@ const escaleticket = async (req, res) => {
     }
 
     const assignedToUser = await Staff.findOne({
-      name: assignedTo,
+      email: assignedTo,
     });
 
     const assignedByUser = await Staff.findOne({
-      name: assignedBy,
+      email: assignedBy,
     });
 
     let userObject = {};
@@ -68,15 +90,15 @@ const escaleticket = async (req, res) => {
     };
 
     const result = await Ticket.updateOne(
-      {ticketId }, // Using the unique identifier to match the specific document
-      { $set: {currentAssignedTo:assignedToUser}}
+      { ticketId }, // Using the unique identifier to match the specific document
+      { $set: { currentAssignedTo: assignedToUser } }
     );
     console.log(newUser);
     ticket.transition.push({
       from: {
         ...newUser._doc,
         ...userObject,
-        createdAt: moment().format('MM/DD/YYYY, h:mm:ss a')
+        createdAt: moment().format("MM/DD/YYYY, h:mm:ss a"),
       },
       to: assignedToUser,
     });
@@ -96,21 +118,21 @@ const escaleticket = async (req, res) => {
   }
 };
 
-const ticketHistory = async(req,res)=>{
+const ticketHistory = async (req, res) => {
   const id = req.params.id;
-  const data = await Ticket.findOne({ticketId:id})
-  if(!data){
+  const data = await Ticket.findOne({ ticketId: id });
+  if (!data) {
     return res.send({
       error: true,
       message: "Ticket id not found ",
-    })
+    });
   }
   res.status(201).send({
     error: false,
     message: "Ticket Data found successfully",
-    data:data,
+    data: data,
   });
   // res.status(201).json({data})
-}
+};
 
-module.exports = { escaleticket,ticketHistory };
+module.exports = { escaleticket, ticketHistory };
