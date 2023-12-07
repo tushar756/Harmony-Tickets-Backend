@@ -39,6 +39,8 @@ const createTicket = async (req, res) => {
   try {
     // Extract ticket data from the request body
     console.log(req.body)
+    const {_id}= req.user
+    console.log(_id)
     const { error, value } = createTicketValidation.validate(req.body);
     if(error){
       return res.status(400).json({
@@ -67,13 +69,18 @@ const createTicket = async (req, res) => {
     console.log(staffMember)
     if(!staffMember) throw new Error("NO STAFF MEMBER")
 
-    const createdTicket = await Ticket.create({ ...value, ticketId, currentAssignedTo: staffMember._id});
+    const createdTicket = await Ticket.create({ ...value, ticketId, currentAssignedTo: staffMember._id,createdBy:_id});
     // await User.updateOne({ _id: staffMember._id },{  $push: { assignedTickets: createdTicket._id} }).populate('assignedTickets').exec();
      await User.findByIdAndUpdate(
       staffMember._id,
       { $push: { assignedTickets: createdTicket._id } },
       { new: true }
     ).populate('assignedTickets').exec();
+
+      
+
+
+
 
     // Return a success response
     res.status(201).json({

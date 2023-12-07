@@ -6,6 +6,6 @@ const staffRouter = express.Router();
 
 const { staffTicket } = require("../controller/staff.js");
 
-staffRouter.get("/:id", staffTicket);
+staffRouter.get("/staffTickets", staffTicket);
 
 module.exports = staffRouter;

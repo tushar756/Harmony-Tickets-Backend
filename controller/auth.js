@@ -40,8 +40,9 @@ const signin = async (req, res) => {
         expiresIn: "30d",
       }
     );
-
+      existingUser.password = undefined;
     // Return the response
+    console.log(existingUser)
     return res.status(200).json({
       error: false,
       data: {

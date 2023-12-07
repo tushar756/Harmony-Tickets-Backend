@@ -1,12 +1,13 @@
 const Ticket = require("../model/ticket.js");
-const Staff = require("../model/staff.js");
+const User = require('../model/user.js');
 const moment = require('moment');
 const escaleticket = async (req, res) => {
+  // console.log(req.body)
   try {
     const {
       ticketId,
       assignedBy,
-      assignedTo,
+      currentAssignedTo,
       description,
       Bug_Status,
       priority,
@@ -16,30 +17,32 @@ const escaleticket = async (req, res) => {
       ticketId,
     });
 
-    // console.log(ticket);
+    console.log(ticket);
 
     if (!ticket) {
       return res.send({
         error: true,
         message: "Ticket not found",
       });
-    }
+    } 
 
-    if (ticket.currentAssignedTo.name !== assignedBy) {
-      return res.send({
-        error: true,
-        message: "You are not allowed to assign this ticket",
-      });
-    }
-
-    const assignedToUser = await Staff.findOne({
-      name: assignedTo,
+    // if (ticket.currentAssignedTo.name !== assignedBy) {
+    //   return res.send({
+    //     error: true,
+    //     message: "You are not allowed to assign this ticket",
+    //   });
+    // }
+  console.log("above")
+    const assignedToUser = await User.findOne({
+      email: currentAssignedTo,
     });
+    console.log(assignedToUser)
 
-    const assignedByUser = await Staff.findOne({
+
+    const assignedByUser = await User.findOne({
       name: assignedBy,
     });
-
+    console.log(assignedByUser)
     let userObject = {};
 
     if (description) {
@@ -68,7 +71,7 @@ const escaleticket = async (req, res) => {
     };
 
     const result = await Ticket.updateOne(
-      {ticketId }, // Using the unique identifier to match the specific document
+      {ticketId },
       { $set: {currentAssignedTo:assignedToUser}}
     );
     console.log(newUser);

@@ -20,7 +20,7 @@ Ticketrouter.get("/all", async (req, res) => {
     //   },
     // ]);
 
-    const allticket = await Ticket.find({}).populate("currentAssignedTo");
+    const allticket = await Ticket.find({}).populate("currentAssignedTo").populate("createdBy");
 
     return res.status(200).json({
       error: false,

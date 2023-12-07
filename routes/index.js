@@ -9,8 +9,8 @@ const protect = require("../middleware/auth.js");
 const roleRouteAccess = require("../middleware/role_access.js");
 // import { getAllStaff } from "../controller/manager.js";
 router.use("/manager", protect, roleRouteAccess, managerRoute);
-router.use("/ticket", protect, Ticketrouter);
-router.use("/staff", protect, roleRouteAccess, staffRouter);
+router.use("/ticket", Ticketrouter);
+router.use("/staff", protect, staffRouter);
 router.use("/auth", authRouter);
 // router.get("getAllStaff", getAllStaff)
 

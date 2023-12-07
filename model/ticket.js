@@ -17,10 +17,16 @@ const ticketSchema = new mongoose.Schema({
     enum: ["High", "Mid", "Low"],
     required: true,
   },
+
   Bug_Status: {
     type: String,
     enum: ["open", "close/resoved", "pending"],
     // default: "open"
+  },
+  createdBy:{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "user",
+    required: true,
   },
   currentAssignedTo: {
     type: mongoose.Schema.Types.ObjectId,
