@@ -13,6 +13,28 @@ const escaleticket = async (req, res) => {
       priority,
       media_url,
     } = req.body;
+
+    if (!ticketId) {
+      return res.send({
+        error: true,
+        message: "Ticket id is required",
+      });
+    }
+
+    if (
+      !assignedBy ||
+      !assignedTo ||
+      !description ||
+      !Bug_Status ||
+      !priority ||
+      !media_url
+    ) {
+      return res.send({
+        error: true,
+        message: "All fields are required",
+      });
+    }
+
     const ticket = await Ticket.findOne({
       ticketId,
     });
@@ -79,7 +101,7 @@ const escaleticket = async (req, res) => {
       from: {
         ...newUser._doc,
         ...userObject,
-        createdAt: moment().format('MM/DD/YYYY, h:mm:ss a')
+        createdAt: moment().format("MM/DD/YYYY, h:mm:ss a"),
       },
       to: assignedToUser,
     });
@@ -99,21 +121,21 @@ const escaleticket = async (req, res) => {
   }
 };
 
-const ticketHistory = async(req,res)=>{
+const ticketHistory = async (req, res) => {
   const id = req.params.id;
-  const data = await Ticket.findOne({ticketId:id})
-  if(!data){
+  const data = await Ticket.findOne({ ticketId: id });
+  if (!data) {
     return res.send({
       error: true,
       message: "Ticket id not found ",
-    })
+    });
   }
   res.status(201).send({
     error: false,
     message: "Ticket Data found successfully",
-    data:data,
+    data: data,
   });
   // res.status(201).json({data})
-}
+};
 
-module.exports = { escaleticket,ticketHistory };
+module.exports = { escaleticket, ticketHistory };
