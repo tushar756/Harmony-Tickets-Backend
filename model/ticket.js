@@ -20,7 +20,7 @@ const ticketSchema = new mongoose.Schema({
 
   Bug_Status: {
     type: String,
-    enum: ["open", "close/resoved", "pending"],
+    enum: ["Open", "Resolved", "Pending"],
     // default: "open"
   },
   createdBy:{
@@ -33,9 +33,9 @@ const ticketSchema = new mongoose.Schema({
     ref: "user",
     required: true,
   },
-  media_url: {
-    type: String,
-  },
+  // media_url: {
+  //   type: String,
+  // },
   ticketId: {
     type: Number,
     required: true,

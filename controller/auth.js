@@ -2,6 +2,12 @@ const Manager = require("../model/manager");
 const Staff = require("../model/staff");
 const User = require("../model/user");
 const jwt = require("jsonwebtoken");
+const bcrypt = require('bcrypt');
+
+
+
+
+
 const signin = async (req, res) => {
   try {
     const { email, password, role } = req.body;
@@ -12,7 +18,7 @@ const signin = async (req, res) => {
     }
 
     const existingUser = await User.findOne({ email, role });
-    console.log(existingUser);
+     
     if (!existingUser) {
       return res.status(400).json({
         error: true,
@@ -21,7 +27,7 @@ const signin = async (req, res) => {
     }
 
     // Check if the password is correct
-    const isPasswordCorrect = existingUser.password === password;
+    const isPasswordCorrect = await bcrypt.compare(password, existingUser.password);
     if (!isPasswordCorrect) {
       return res.status(400).json({
         error: true,
@@ -41,8 +47,12 @@ const signin = async (req, res) => {
       }
     );
       existingUser.password = undefined;
+
+
+
+
     // Return the response
-    console.log(existingUser)
+   
     return res.status(200).json({
       error: false,
       data: {
@@ -52,7 +62,7 @@ const signin = async (req, res) => {
       message: "User member signed in successfully",
     });
   } catch (err) {
-    console.log(err)
+   
     return res.status(500).json({
       error: true,
       message: "Internal server error",

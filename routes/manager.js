@@ -14,14 +14,15 @@ const {
   updateStaff,
   deleteStaff,
   getAllStaff,
+  createReport,
 } = require("../controller/manager.js");
 
 managerRoute.post("/create-user", createUser);
 managerRoute.post("/update-staff", updateStaff);
 managerRoute.post("/delete-staff", deleteStaff);
 managerRoute.get("/getAllStaff", getAllStaff);
-
 managerRoute.post("/create-ticket", createTicket);
+managerRoute.post("/create-report", createReport);
 
 
 module.exports = managerRoute;

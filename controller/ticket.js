@@ -1,8 +1,17 @@
-const Ticket = require("../model/ticket.js");
+const express = require('express');
+const Ticket = require('../model/ticket.js');
 const User = require('../model/user.js');
 const moment = require('moment');
+const fileUpload = require('express-fileupload');
+
+const router = express.Router();
+
+// Middleware for file uploads
+router.use(fileUpload());
+
 const escaleticket = async (req, res) => {
-  // console.log(req.body)
+  
+ 
   try {
     const {
       ticketId,
@@ -14,57 +23,37 @@ const escaleticket = async (req, res) => {
       media_url,
     } = req.body;
 
-    if (!ticketId) {
-      return res.send({
+    if (!assignedBy || !description) {
+      return res.status(400).json({
         error: true,
-        message: "Ticket id is required",
+        message: 'All fields are required',
       });
     }
 
-    if (
-      !assignedBy ||
-      !assignedTo ||
-      !description ||
-      !Bug_Status ||
-      !priority ||
-      !media_url
-    ) {
-      return res.send({
-        error: true,
-        message: "All fields are required",
-      });
+    let fileURL = '';
+    if (req.files && req.files.file) {
+      const uploadedFile = req.files.file;
+      const fileName = `${ticketId}_${uploadedFile.name}`;
+
+      // Move the file to the desired location
+      await uploadedFile.mv(`uploads/${fileName}`);
+      fileURL = `/uploads/${fileName}`;
+    } else {
+      console.error('No file selected');
     }
 
-    const ticket = await Ticket.findOne({
-      ticketId,
-    });
-
-    console.log(ticket);
+    const ticket = await Ticket.findOne({ ticketId });
 
     if (!ticket) {
-      return res.send({
+      return res.status(404).json({
         error: true,
-        message: "Ticket not found",
+        message: 'Ticket not found',
       });
-    } 
+    }
 
-    // if (ticket.currentAssignedTo.name !== assignedBy) {
-    //   return res.send({
-    //     error: true,
-    //     message: "You are not allowed to assign this ticket",
-    //   });
-    // }
-  console.log("above")
-    const assignedToUser = await User.findOne({
-      email: currentAssignedTo,
-    });
-    console.log(assignedToUser)
+    const assignedToUser = await User.findOne({ email: currentAssignedTo });
+    const assignedByUser = await User.findOne({ name: assignedBy });
 
-
-    const assignedByUser = await User.findOne({
-      name: assignedBy,
-    });
-    console.log(assignedByUser)
     let userObject = {};
 
     if (description) {
@@ -93,28 +82,30 @@ const escaleticket = async (req, res) => {
     };
 
     const result = await Ticket.updateOne(
-      {ticketId },
-      { $set: {currentAssignedTo:assignedToUser}}
+      { ticketId },
+      { $set: { currentAssignedTo: assignedToUser } }
     );
-    console.log(newUser);
+
     ticket.transition.push({
       from: {
+        email: assignedBy,
         ...newUser._doc,
         ...userObject,
-        createdAt: moment().format("MM/DD/YYYY, h:mm:ss a"),
+        createdAt: moment().format('lll'),
       },
       to: assignedToUser,
+      fileURL: fileURL,
     });
 
     await ticket.save();
 
-    res.send({
+    res.status(200).json({
       error: false,
-      message: "Ticket assigned successfully",
+      message: 'Ticket assigned successfully',
       data: ticket,
     });
   } catch (err) {
-    res.send({
+    res.status(500).json({
       error: true,
       message: err.message,
     });
@@ -123,19 +114,25 @@ const escaleticket = async (req, res) => {
 
 const ticketHistory = async (req, res) => {
   const id = req.params.id;
-  const data = await Ticket.findOne({ ticketId: id });
-  if (!data) {
-    return res.send({
+  try {
+    const data = await Ticket.findOne({ ticketId: id });
+    if (!data) {
+      return res.status(404).json({
+        error: true,
+        message: 'Ticket id not found',
+      });
+    }
+    res.status(200).json({
+      error: false,
+      message: 'Ticket Data found successfully',
+      data: data,
+    });
+  } catch (err) {
+    res.status(500).json({
       error: true,
-      message: "Ticket id not found ",
+      message: err.message,
     });
   }
-  res.status(201).send({
-    error: false,
-    message: "Ticket Data found successfully",
-    data: data,
-  });
-  // res.status(201).json({data})
 };
 
 module.exports = { escaleticket, ticketHistory };
