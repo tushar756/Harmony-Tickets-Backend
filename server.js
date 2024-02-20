@@ -12,7 +12,7 @@ dbConnected();
 
 app.use(express.json());
 app.use(cors())
-app.get("/ll",(req,res)=>{
+app.get("/",(req,res)=>{
   res.send("hiii")
 })
 // app.use(cors({
