@@ -142,6 +142,7 @@ const deleteStaff = async (req, res) => {
 
 const getAllStaff = async (req, res) => {
   try {
+    // console.log()
     const response = await User.find({});
     res.status(200).json({
       error: false,
