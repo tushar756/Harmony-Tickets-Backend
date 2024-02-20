@@ -12,6 +12,12 @@ dbConnected();
 
 app.use(express.json());
 app.use(cors())
+app.get("/ll",(req,res)=>{
+  res.send("hiii")
+})
+// app.use(cors({
+//   origin: 'http://localhost:5173',
+// }));
 app.use(express.urlencoded({ extended: true }));
 const router = require("./routes/index.js");
 app.use("/api", router);
