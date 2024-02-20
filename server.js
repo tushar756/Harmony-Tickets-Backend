@@ -13,9 +13,9 @@ dbConnected();
 app.use(express.json());
 app.use(cors({
   origin: "*",
-  // origin:["https://deploy-mern-lwhq.vercel.app"],
+  origin:["https://ticket-frontend-qglq.vercel.app/"],
   methods:["POST","GET","DELETE","PATCH","PUT","OPTIONS"],
-  // credentials:true,
+  credentials:true,
 }))
 app.get("/",(req,res)=>{
   res.send("hiii")
