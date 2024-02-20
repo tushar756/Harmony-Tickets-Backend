@@ -12,9 +12,10 @@ dbConnected();
 
 app.use(express.json());
 app.use(cors({
-  origin:["https://deploy-mern-lwhq.vercel.app"],
-  methods:["POST","GET"],
-  credentials:true,
+  origin: "*",
+  // origin:["https://deploy-mern-lwhq.vercel.app"],
+  methods:["POST","GET","DELETE","PATCH","PUT","OPTIONS"],
+  // credentials:true,
 }))
 app.get("/",(req,res)=>{
   res.send("hiii")
