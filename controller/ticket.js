@@ -135,4 +135,74 @@ const ticketHistory = async (req, res) => {
   }
 };
 
-module.exports = { escaleticket, ticketHistory };
+const statusCount = async (req, res) => {
+  try {
+    // Count tickets with different statuses
+    const pendingCount = await Ticket.countDocuments({ Bug_Status: "Pending" });
+    const resolvedCount = await Ticket.countDocuments({ Bug_Status: "Resolved" });
+    const openCount = await Ticket.countDocuments({ Bug_Status: "Open" });
+    const staffCount = await User.countDocuments({});
+    
+    // Calculate tickets pending for more than two days
+    const twoDaysAgo = new Date();
+    twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
+    const pendingMoreThanTwoDaysCount = await Ticket.countDocuments({ 
+      Bug_Status: "Pending",
+      createdAt: { $lt: twoDaysAgo }
+    });
+
+    return res.status(200).json({
+      error: false,
+      message: "Ticket status counts",
+      data: {
+        pendingCount: pendingCount,
+        resolvedCount: resolvedCount,
+        openCount: openCount,
+        pendingMoreThanTwoDaysCount: pendingMoreThanTwoDaysCount,
+        staffCount
+      },
+    });
+  } catch (err) {
+    res.status(500).json({
+      error: true,
+      message: "Internal Server Error",
+      data: null
+    });
+  }
+}
+const getAllTicket = async (req, res) => {
+  try {
+    const allticket = await Ticket.find({}).populate("currentAssignedTo").populate("createdBy");
+    const alltickets = await Ticket.find({}).populate("createdBy");
+    return res.status(200).json({
+      error: false,
+      message: "All ticket",
+      data: allticket,
+    });
+  } catch (err) {
+    res.send("Error" + err);
+  }
+}
+
+
+const getAllOpenTickets = async (req, res) => {
+  try {
+    // Assuming 'status' is the field representing the status of the ticket
+    const openTickets = await Ticket.find({ status: 'open' })
+      .populate("currentAssignedTo")
+      .populate("createdBy");
+
+    return res.status(200).json({
+      error: false,
+      message: "Open tickets",
+      data: openTickets,
+    });
+  } catch (err) {
+    res.status(500).json({
+      error: true,
+      message: "Error retrieving open tickets",
+      data: null,
+    });
+  }
+}
+module.exports = { escaleticket, ticketHistory,statusCount , getAllTicket,getAllOpenTickets};
