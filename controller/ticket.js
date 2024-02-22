@@ -245,4 +245,64 @@ const getAllResolvedTickets = async (req, res) => {
     });
   }
 }
-module.exports = { escaleticket, ticketHistory,statusCount , getAllTicket,getAllOpenTickets,getAllPendingTickets,getAllResolvedTickets};
+const getAllHighPriorityickets = async (req, res) => {
+  try {
+    // Assuming 'status' is the field representing the status of the ticket
+    const openTickets = await Ticket.find({ priority: "High" })
+      .populate("currentAssignedTo")
+      .populate("createdBy");
+
+    return res.status(200).json({
+      error: false,
+      message: "Open tickets",
+      data: openTickets,
+    });
+  } catch (err) {
+    res.status(500).json({
+      error: true,
+      message: "Error retrieving open tickets",
+      data: null,
+    });
+  }
+}
+const getAllMidPriorityickets = async (req, res) => {
+  try {
+    // Assuming 'status' is the field representing the status of the ticket
+    const openTickets = await Ticket.find({ priority: 'Mid' })
+      .populate("currentAssignedTo")
+      .populate("createdBy");
+
+    return res.status(200).json({
+      error: false,
+      message: "Open tickets",
+      data: openTickets,
+    });
+  } catch (err) {
+    res.status(500).json({
+      error: true,
+      message: "Error retrieving open tickets",
+      data: null,
+    });
+  }
+}
+const getAllLowPriorityickets = async (req, res) => {
+  try {
+    // Assuming 'status' is the field representing the status of the ticket
+    const openTickets = await Ticket.find({ priority: 'Low' })
+      .populate("currentAssignedTo")
+      .populate("createdBy");
+
+    return res.status(200).json({
+      error: false,
+      message: "Open tickets",
+      data: openTickets,
+    });
+  } catch (err) {
+    res.status(500).json({
+      error: true,
+      message: "Error retrieving open tickets",
+      data: null,
+    });
+  }
+}
+module.exports = { escaleticket, ticketHistory,statusCount , getAllTicket,getAllOpenTickets,getAllPendingTickets,getAllResolvedTickets,getAllHighPriorityickets,getAllMidPriorityickets,getAllLowPriorityickets};

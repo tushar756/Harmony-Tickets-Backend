@@ -1,7 +1,7 @@
 const expore = require("express");
 const Ticket = require("../model/ticket.js");
 const Ticketrouter = expore.Router();
-const { escaleticket, ticketHistory, statusCount, getAllTicket, getAllOpenTickets, getAllPendingTickets, getAllResolvedTickets } = require("../controller/ticket.js");
+const { escaleticket, ticketHistory, statusCount, getAllTicket, getAllOpenTickets, getAllPendingTickets, getAllResolvedTickets, getAllHighPriorityickets, getAllMidPriorityickets, getAllLowPriorityickets } = require("../controller/ticket.js");
 const multer = require("multer");
 const path = require("path");
 const moment = require('moment')
@@ -21,9 +21,9 @@ Ticketrouter.get("/ticketHistory/:id", ticketHistory);
 Ticketrouter.get("/totalOpenTickets", getAllOpenTickets);
 Ticketrouter.get("/totalPendingTickets", getAllPendingTickets);
 Ticketrouter.get("/totalResolvedTickets", getAllResolvedTickets);
-Ticketrouter.get("/totalHighPriorityTickets", ticketHistory);
-Ticketrouter.get("/totalMidPriorityTickets", ticketHistory);
-Ticketrouter.get("/totalLowPriorityTickets", ticketHistory);
+Ticketrouter.get("/totalHighPriorityTickets", getAllHighPriorityickets);
+Ticketrouter.get("/totalMidPriorityTickets", getAllMidPriorityickets);
+Ticketrouter.get("/totalLowPriorityTickets", getAllLowPriorityickets);
 
 
 
