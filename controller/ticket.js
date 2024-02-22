@@ -268,7 +268,7 @@ const getAllHighPriorityickets = async (req, res) => {
 const getAllMidPriorityickets = async (req, res) => {
   try {
     // Assuming 'status' is the field representing the status of the ticket
-    const openTickets = await Ticket.find({ priority: 'Mid' })
+    const openTickets = await Ticket.find({ priority: "Mid" })
       .populate("currentAssignedTo")
       .populate("createdBy");
 
@@ -288,7 +288,7 @@ const getAllMidPriorityickets = async (req, res) => {
 const getAllLowPriorityickets = async (req, res) => {
   try {
     // Assuming 'status' is the field representing the status of the ticket
-    const openTickets = await Ticket.find({ priority: 'Low' })
+    const openTickets = await Ticket.find({ priority: "Low" })
       .populate("currentAssignedTo")
       .populate("createdBy");
 
