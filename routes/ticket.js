@@ -1,7 +1,7 @@
 const expore = require("express");
 const Ticket = require("../model/ticket.js");
 const Ticketrouter = expore.Router();
-const { escaleticket, ticketHistory } = require("../controller/ticket.js");
+const { escaleticket, ticketHistory, statusCount, getAllTicket, getAllOpenTickets } = require("../controller/ticket.js");
 const multer = require("multer");
 const path = require("path");
 const moment = require('moment')
@@ -14,59 +14,25 @@ Ticketrouter.use(fileUpload({
 }));
 
 
-Ticketrouter.get("/all", async (req, res) => {
-  try {
-    const allticket = await Ticket.find({}).populate("currentAssignedTo").populate("createdBy");
-    const alltickets = await Ticket.find({}).populate("createdBy");
-    return res.status(200).json({
-      error: false,
-      message: "All ticket",
-      data: allticket,
-    });
-  } catch (err) {
-    res.send("Error" + err);
-  }
- 
-});
-Ticketrouter.get("/statusCount", async (req, res) => {
-  try {
-    // Count tickets with different statuses
-    const pendingCount = await Ticket.countDocuments({ Bug_Status: "Pending" });
-    const resolvedCount = await Ticket.countDocuments({ Bug_Status: "Resolved" });
-    const openCount = await Ticket.countDocuments({ Bug_Status: "Open" });
-    const staffCount = await User.countDocuments({});
-    
-    // Calculate tickets pending for more than two days
-    const twoDaysAgo = new Date();
-    twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
-    const pendingMoreThanTwoDaysCount = await Ticket.countDocuments({ 
-      Bug_Status: "Pending",
-      createdAt: { $lt: twoDaysAgo }
-    });
-
-    return res.status(200).json({
-      error: false,
-      message: "Ticket status counts",
-      data: {
-        pendingCount: pendingCount,
-        resolvedCount: resolvedCount,
-        openCount: openCount,
-        pendingMoreThanTwoDaysCount: pendingMoreThanTwoDaysCount,
-        staffCount
-      },
-    });
-  } catch (err) {
-    res.status(500).json({
-      error: true,
-      message: "Internal Server Error",
-      data: null
-    });
-  }
-});
-
-
+Ticketrouter.get("/all", getAllTicket);
+Ticketrouter.get("/statusCount", statusCount);
 Ticketrouter.post("/esclate", escaleticket);
 Ticketrouter.get("/ticketHistory/:id", ticketHistory);
+Ticketrouter.get("/totalOpenTickets", getAllOpenTickets);
+Ticketrouter.get("/totalPendingTickets", ticketHistory);
+Ticketrouter.get("/totalResolvedTickets", ticketHistory);
+Ticketrouter.get("/totalHighPriorityTickets", ticketHistory);
+Ticketrouter.get("/totalMidPriorityTickets", ticketHistory);
+Ticketrouter.get("/totalLowPriorityTickets", ticketHistory);
+
+
+
+
+
+
+
+
+
 
 // const storage = multer.diskStorage({
 //   destination: function (req, file, cb) {
