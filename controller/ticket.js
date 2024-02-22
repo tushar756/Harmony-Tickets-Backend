@@ -141,25 +141,23 @@ const statusCount = async (req, res) => {
     const pendingCount = await Ticket.countDocuments({ Bug_Status: "Pending" });
     const resolvedCount = await Ticket.countDocuments({ Bug_Status: "Resolved" });
     const openCount = await Ticket.countDocuments({ Bug_Status: "Open" });
-    const staffCount = await User.countDocuments({});
+    const HighPriorityCount = await Ticket.countDocuments({ priority: "High" });
+    const LowPriorityCount = await Ticket.countDocuments({ priority: "Low" });
+    const MidPriorityCount = await Ticket.countDocuments({ priority: "Mid" });
     
-    // Calculate tickets pending for more than two days
-    const twoDaysAgo = new Date();
-    twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
-    const pendingMoreThanTwoDaysCount = await Ticket.countDocuments({ 
-      Bug_Status: "Pending",
-      createdAt: { $lt: twoDaysAgo }
-    });
+    
+
 
     return res.status(200).json({
       error: false,
       message: "Ticket status counts",
       data: {
-        pendingCount: pendingCount,
-        resolvedCount: resolvedCount,
-        openCount: openCount,
-        pendingMoreThanTwoDaysCount: pendingMoreThanTwoDaysCount,
-        staffCount
+        pendingCount,
+        resolvedCount,
+        openCount,
+       HighPriorityCount,
+       LowPriorityCount,
+       MidPriorityCount
       },
     });
   } catch (err) {
