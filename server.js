@@ -12,8 +12,8 @@ dbConnected();
 
 app.use(express.json());
 app.use(cors({
- 
-  origin:["https://ticket-frontend-qglq.vercel.app/"],
+  // origin:["https://ticket-frontend-qglq.vercel.app/"],
+  origin:"*",
   methods:["POST","GET","DELETE","PATCH","PUT","OPTIONS"],
   credentials:true,
 }))
