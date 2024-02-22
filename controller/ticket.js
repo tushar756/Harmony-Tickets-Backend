@@ -188,7 +188,7 @@ const getAllTicket = async (req, res) => {
 const getAllOpenTickets = async (req, res) => {
   try {
     // Assuming 'status' is the field representing the status of the ticket
-    const openTickets = await Ticket.find({ status: 'open' })
+    const openTickets = await Ticket.find({ Bug_Status: 'Open' })
       .populate("currentAssignedTo")
       .populate("createdBy");
 
