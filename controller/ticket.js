@@ -205,4 +205,44 @@ const getAllOpenTickets = async (req, res) => {
     });
   }
 }
-module.exports = { escaleticket, ticketHistory,statusCount , getAllTicket,getAllOpenTickets};
+const getAllPendingTickets = async (req, res) => {
+  try {
+    // Assuming 'status' is the field representing the status of the ticket
+    const openTickets = await Ticket.find({ Bug_Status: 'Pending' })
+      .populate("currentAssignedTo")
+      .populate("createdBy");
+
+    return res.status(200).json({
+      error: false,
+      message: "Open tickets",
+      data: openTickets,
+    });
+  } catch (err) {
+    res.status(500).json({
+      error: true,
+      message: "Error retrieving open tickets",
+      data: null,
+    });
+  }
+}
+const getAllResolvedTickets = async (req, res) => {
+  try {
+    // Assuming 'status' is the field representing the status of the ticket
+    const openTickets = await Ticket.find({ Bug_Status: 'Resolved' })
+      .populate("currentAssignedTo")
+      .populate("createdBy");
+
+    return res.status(200).json({
+      error: false,
+      message: "Open tickets",
+      data: openTickets,
+    });
+  } catch (err) {
+    res.status(500).json({
+      error: true,
+      message: "Error retrieving open tickets",
+      data: null,
+    });
+  }
+}
+module.exports = { escaleticket, ticketHistory,statusCount , getAllTicket,getAllOpenTickets,getAllPendingTickets,getAllResolvedTickets};
