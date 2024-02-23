@@ -15,6 +15,7 @@ const {
   deleteStaff,
   getAllStaff,
   createReport,
+  escaleticket,
 } = require("../controller/manager.js");
 
 managerRoute.post("/create-user", createUser);
@@ -22,6 +23,7 @@ managerRoute.post("/update-staff", updateStaff);
 managerRoute.post("/delete-staff", deleteStaff);
 managerRoute.get("/getAllStaff", getAllStaff);
 managerRoute.post("/create-ticket", createTicket);
+managerRoute.post("/escalate-ticket", escaleticket);
 managerRoute.post("/create-report", createReport);
 
 
