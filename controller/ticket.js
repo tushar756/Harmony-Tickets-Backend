@@ -52,7 +52,7 @@ const escaleticket = async (req, res) => {
     }
 
     const assignedToUser = await User.findOne({ email: currentAssignedTo });
-    const assignedByUser = await User.findOne({ name: assignedBy });
+    const assignedByUser = await User.find({ name: assignedBy });
 
     let userObject = {};
 
