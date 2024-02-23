@@ -144,9 +144,6 @@ const statusCount = async (req, res) => {
     const HighPriorityCount = await Ticket.countDocuments({ priority: "High" });
     const LowPriorityCount = await Ticket.countDocuments({ priority: "Low" });
     const MidPriorityCount = await Ticket.countDocuments({ priority: "Mid" });
-    
-    
-
 
     return res.status(200).json({
       error: false,
