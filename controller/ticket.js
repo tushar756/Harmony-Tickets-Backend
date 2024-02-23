@@ -91,6 +91,8 @@ const escaleticket = async (req, res) => {
         email: assignedBy,
         ...newUser._doc,
         ...userObject,
+        firstName: assignedByUser.firstName,
+        lastName: assignedByUser.lastName,
         createdAt: moment().format('lll'),
       },
       to: assignedToUser,
