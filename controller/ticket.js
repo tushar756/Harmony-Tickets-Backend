@@ -89,10 +89,10 @@ const escaleticket = async (req, res) => {
     ticket.transition.push({
       from: {
         email: assignedBy,
-        ...newUser,
+        // ...newUser,
         ...userObject,
-        // firstName: assignedByUser.firstName,
-        // lastName: assignedByUser.lastName,
+        firstName: assignedByUser.firstName,
+        lastName: assignedByUser.lastName,
         createdAt: moment().format('lll'),
       },
       to: assignedToUser,
