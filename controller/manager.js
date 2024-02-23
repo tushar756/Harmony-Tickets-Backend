@@ -4,7 +4,7 @@ const User = require("../model/user.js");
 const Joi = require("joi");
 const moment = require("moment");
 const createUser = async (req, res) => {
-  const bcrypt = require('bcrypt');
+  const bcrypt = require("bcrypt");
   try {
     const { error, value } = createUserValidation.validate(req.body);
     if (error) {
@@ -22,7 +22,10 @@ const createUser = async (req, res) => {
       });
     }
     const hashedPassword = await bcrypt.hash(value.password, 10);
-    const createUser = await User.create({ ...value, password: hashedPassword });
+    const createUser = await User.create({
+      ...value,
+      password: hashedPassword,
+    });
     return res.status(201).json({
       error: false,
       data: createUser,
@@ -39,11 +42,10 @@ const createUser = async (req, res) => {
 
 const createTicket = async (req, res) => {
   try {
-   
-    console.log(req.body)
-   
+    console.log(req.body);
+
     const { _id } = req.user;
-   const value= req.body
+    const value = req.body;
     // const { error, value } = createTicketValidation.validate(req.body);
     // if (error) {
     //   return res.status(400).json({
@@ -63,12 +65,12 @@ const createTicket = async (req, res) => {
         message: "Ticket with the given ticketId already exists",
       });
     }
- 
+
     const staffMember = await User.findOne({
       email: value.currentAssignedTo,
       // role: "staff",
     });
-   
+
     if (!staffMember) throw new Error("NO STAFF MEMBER");
 
     const createdTicket = await Ticket.create({
@@ -82,7 +84,6 @@ const createTicket = async (req, res) => {
       _id,
     });
 
-  
     const { description, Bug_Status, priority, media_url } = createdTicket;
     const newObj = {
       description,
@@ -91,7 +92,7 @@ const createTicket = async (req, res) => {
       media_url,
       ticketId,
       ...user._doc,
-      createdAt: moment().format('lll')
+      createdAt: moment().format("lll"),
     };
 
     createdTicket.transition.push({
@@ -123,8 +124,6 @@ const createTicket = async (req, res) => {
   }
 };
 const escaleticket = async (req, res) => {
-  
- 
   try {
     const { _id } = req.user;
     const {
@@ -140,11 +139,11 @@ const escaleticket = async (req, res) => {
     if (!assignedBy || !description) {
       return res.status(400).json({
         error: true,
-        message: 'All fields are required',
+        message: "All fields are required",
       });
     }
 
-    let fileURL = '';
+    let fileURL = "";
     if (req.files && req.files.file) {
       const uploadedFile = req.files.file;
       const fileName = `${ticketId}_${uploadedFile.name}`;
@@ -153,7 +152,7 @@ const escaleticket = async (req, res) => {
       await uploadedFile.mv(`uploads/${fileName}`);
       fileURL = `/uploads/${fileName}`;
     } else {
-      console.error('No file selected');
+      console.error("No file selected");
     }
 
     const ticket = await Ticket.findOne({ ticketId });
@@ -161,7 +160,7 @@ const escaleticket = async (req, res) => {
     if (!ticket) {
       return res.status(404).json({
         error: true,
-        message: 'Ticket not found',
+        message: "Ticket not found",
       });
     }
 
@@ -194,9 +193,7 @@ const escaleticket = async (req, res) => {
     const newUser = {
       ...assignedByUser,
     };
-    const user = await User.findOne({
-      _id,
-    });
+
     const result = await Ticket.updateOne(
       { ticketId },
       { $set: { currentAssignedTo: assignedToUser } }
@@ -205,10 +202,11 @@ const escaleticket = async (req, res) => {
     ticket.transition.push({
       from: {
         email: assignedBy,
-        ...newUser._doc,
+        ...newUser,
         ...userObject,
-        ...user._doc,
-        createdAt: moment().format('lll'),
+        // firstName: "Tushar",
+        // lastName: "Deshmukh",
+        createdAt: moment().format("lll"),
       },
       to: assignedToUser,
       fileURL: fileURL,
@@ -218,7 +216,7 @@ const escaleticket = async (req, res) => {
 
     res.status(200).json({
       error: false,
-      message: 'Ticket assigned successfully',
+      message: "Ticket assigned successfully",
       data: ticket,
     });
   } catch (err) {
@@ -261,18 +259,16 @@ const getAllStaff = async (req, res) => {
   }
 };
 
-
 const createReport = async (req, res) => {
   try {
     const { _id } = req.user;
-    console.log(req.user)
-   const value= req.body
- 
+    console.log(req.user);
+    const value = req.body;
 
     const createdTicket = await Report.create({
       ...value,
     });
- 
+
     await createdTicket.save();
 
     res.status(201).json({
@@ -289,16 +285,14 @@ const createReport = async (req, res) => {
   }
 };
 
-
-
 module.exports = {
   createUser,
   getAllStaff,
   createTicket,
   updateStaff,
   deleteStaff,
- createReport,
- escaleticket
+  createReport,
+  escaleticket,
 };
 
 const createUserValidation = Joi.object({
@@ -316,5 +310,7 @@ const createTicketValidation = Joi.object({
   priority: Joi.string().valid("High", "Mid", "Low").required(),
   Bug_Status: Joi.string().required(),
   currentAssignedTo: Joi.string().required(),
-  file: Joi.string().required().regex(/\.(pdf|doc|docx|jpg|png)$/i) // Validate file extension 
+  file: Joi.string()
+    .required()
+    .regex(/\.(pdf|doc|docx|jpg|png)$/i), // Validate file extension
 });
