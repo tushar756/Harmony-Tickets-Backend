@@ -39,10 +39,9 @@ const createUser = async (req, res) => {
 
 const createTicket = async (req, res) => {
   try {
-    console.log("object11")
+   
     console.log(req.body)
-    // console.log(value.priority)
-    console.log("object12")
+   
     const { _id } = req.user;
    const value= req.body
     // const { error, value } = createTicketValidation.validate(req.body);
@@ -127,6 +126,7 @@ const escaleticket = async (req, res) => {
   
  
   try {
+    const { _id } = req.user;
     const {
       ticketId,
       assignedBy,
@@ -194,7 +194,9 @@ const escaleticket = async (req, res) => {
     const newUser = {
       ...assignedByUser,
     };
-
+    const user = await User.findOne({
+      _id,
+    });
     const result = await Ticket.updateOne(
       { ticketId },
       { $set: { currentAssignedTo: assignedToUser } }
@@ -205,6 +207,7 @@ const escaleticket = async (req, res) => {
         email: assignedBy,
         ...newUser._doc,
         ...userObject,
+        ...user._doc,
         createdAt: moment().format('lll'),
       },
       to: assignedToUser,
