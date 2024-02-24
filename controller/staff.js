@@ -66,6 +66,26 @@ const counters = async (req, res) => {
     });
   }
 };
+const staffOpenTickets = async (req, res) => {
+  try {
+    // Assuming 'status' is the field representing the status of the ticket
+    const openTickets = await Ticket.find({ currentAssignedTo: data._id, Bug_Status: "Open" })
+      .populate("currentAssignedTo")
+      .populate("createdBy");
+
+    return res.status(200).json({
+      error: false,
+      message: "Open tickets",
+      data: openTickets,
+    });
+  } catch (err) {
+    res.status(500).json({
+      error: true,
+      message: "Error retrieving open tickets",
+      data: null,
+    });
+  }
+}
 const createReport = async (req, res) => {
   try {
     console.log("insede ")
@@ -118,4 +138,4 @@ const getAllReport = async (req,res)=>{
   }
 }
 
-module.exports = { staffTicket,counters,createReport,getAllReport };
+module.exports = { staffTicket,counters,createReport,getAllReport,staffOpenTickets };
