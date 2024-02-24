@@ -69,6 +69,7 @@ const counters = async (req, res) => {
 const staffOpenTickets = async (req, res) => {
   try {
     // Assuming 'status' is the field representing the status of the ticket
+    const data = req.user;
     const openTickets = await Ticket.find({ currentAssignedTo: data._id, Bug_Status: "Open" })
       .populate("currentAssignedTo")
       .populate("createdBy");
