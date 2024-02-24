@@ -190,7 +190,7 @@ const getRaisedTicketsHistory = async (req, res) => {
       error: false,
       message: "All ticket",
       data: allticket,  
-      _id:req.user
+      id:req.user
     });
   } catch (err) {
     res.send("Error" + err);

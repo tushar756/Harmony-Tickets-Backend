@@ -12,6 +12,7 @@ router.use("/manager",protect,roleRouteAccess,  managerRoute);
  
 router.use("/ticket", Ticketrouter);
 router.use("/staff", protect, staffRouter); 
+
 // router.use("/staff",  staffRouter);
 router.use("/auth", authRouter);
 // router.get("getAllStaff", getAllStaff)
