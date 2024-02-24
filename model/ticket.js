@@ -23,6 +23,11 @@ const ticketSchema = new mongoose.Schema({
     enum: ["Open", "Resolved", "Pending"],
     // default: "open"
   },
+  department: {
+    type: String,
+    enum: ["Harmony Pharmacy", "Ebenezer Pharmacy", "Both"],
+    // default: "open"
+  },
   createdBy:{
     type: mongoose.Schema.Types.ObjectId,
     ref: "user",

@@ -84,15 +84,16 @@ const createTicket = async (req, res) => {
       _id,
     });
 
-    const { description, Bug_Status, priority, media_url } = createdTicket;
+    const { description, Bug_Status, priority, media_url,department } = createdTicket;
     const newObj = {
+      department,
       description,
       Bug_Status,
       priority,
       media_url,
       ticketId,
       ...user._doc,
-      createdAt: moment().format("lll"),
+      createdAt: moment().tz('Asia/Kolkata').format("lll"),
     };
 
     createdTicket.transition.push({
