@@ -183,14 +183,14 @@ const getAllTicket = async (req, res) => {
 const getRaisedTicketsHistory = async (req, res) => {
   try {
     const _id = req.user
-    // const allticket = await Ticket.find({currentAssignedTo:_id}).populate("currentAssignedTo").populate("createdBy");
-    const allticket = await Ticket.find({currentAssignedTo:_id})
-    const alltickets = await Ticket.find({}).populate("createdBy");
+    const allticket = await Ticket.find({currentAssignedTo:_id}).populate("currentAssignedTo").populate("createdBy");
+    // const allticket = await Ticket.find({currentAssignedTo:_id})
+    // const alltickets = await Ticket.find({}).populate("createdBy");
     return res.status(200).json({
       error: false,
       message: "All ticket",
       data: allticket,  
-      _id
+      _id:req.user
     });
   } catch (err) {
     res.send("Error" + err);
