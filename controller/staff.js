@@ -246,8 +246,8 @@ const getAllReport = async (req,res)=>{
 const getRaisedTicketsHistory = async (req, res) => {
   try {
     const _id = req.user
-    // const allticket = await Ticket.find({currentAssignedTo:_id}).populate("currentAssignedTo").populate("createdBy");
-    const allticket = await Ticket.find({currentAssignedTo:_id}).populate("currentAssignedTo");
+    const allticket = await Ticket.find({createdBy:_id}).populate("currentAssignedTo").populate("createdBy");
+    // const allticket = await Ticket.find({currentAssignedTo:_id}).populate("currentAssignedTo");
     // const allticket = await Ticket.find({currentAssignedTo:_id})
     // const alltickets = await Ticket.find({}).populate("createdBy");
     return res.status(200).json({
