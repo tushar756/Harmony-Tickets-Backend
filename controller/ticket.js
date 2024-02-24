@@ -180,6 +180,20 @@ const getAllTicket = async (req, res) => {
     res.send("Error" + err);
   }
 }
+const getRaisedTicketsHistory = async (req, res) => {
+  try {
+    const _id = req.user
+    const allticket = await Ticket.find({currentAssignedTo:_id}).populate("currentAssignedTo").populate("createdBy");
+    const alltickets = await Ticket.find({}).populate("createdBy");
+    return res.status(200).json({
+      error: false,
+      message: "All ticket",
+      data: allticket,  
+    });
+  } catch (err) {
+    res.send("Error" + err);
+  }
+}
 
 
 const getAllOpenTickets = async (req, res) => {
@@ -302,4 +316,4 @@ const getAllLowPriorityickets = async (req, res) => {
     });
   }
 }
-module.exports = { escaleticket, ticketHistory,statusCount , getAllTicket,getAllOpenTickets,getAllPendingTickets,getAllResolvedTickets,getAllHighPriorityickets,getAllMidPriorityickets,getAllLowPriorityickets};
+module.exports = { escaleticket, ticketHistory,statusCount , getAllTicket,getAllOpenTickets,getAllPendingTickets,getAllResolvedTickets,getAllHighPriorityickets,getAllMidPriorityickets,getAllLowPriorityickets,getRaisedTicketsHistory};
