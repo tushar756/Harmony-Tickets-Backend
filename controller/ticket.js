@@ -180,6 +180,18 @@ const getAllTicket = async (req, res) => {
     res.send("Error" + err);
   }
 }
+const getAllEbenezerTicket = async (req, res) => {
+  try {
+    const allticket = await Ticket.find({department:"Ebenezer Pharmacy"}).populate("currentAssignedTo").populate("createdBy");
+    return res.status(200).json({
+      error: false,
+      message: "All ticket",
+      data: allticket,
+    });
+  } catch (err) {
+    res.send("Error" + err);
+  }
+}
 const getRaisedTicketsHistory = async (req, res) => {
   try {
     const _id = req.user
@@ -318,4 +330,4 @@ const getAllLowPriorityickets = async (req, res) => {
     });
   }
 }
-module.exports = { escaleticket, ticketHistory,statusCount , getAllTicket,getAllOpenTickets,getAllPendingTickets,getAllResolvedTickets,getAllHighPriorityickets,getAllMidPriorityickets,getAllLowPriorityickets,getRaisedTicketsHistory};
+module.exports = { escaleticket, ticketHistory,statusCount , getAllTicket,getAllOpenTickets,getAllPendingTickets,getAllResolvedTickets,getAllHighPriorityickets,getAllMidPriorityickets,getAllLowPriorityickets,getRaisedTicketsHistory,getAllEbenezerTicket};
