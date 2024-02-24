@@ -34,29 +34,29 @@ const counters = async (req, res) => {
       });
       return; // Add return statement to exit the function early
     }
+ 
+    
 
-    const twoDaysAgo = new Date();
-    twoDaysAgo.setDate(twoDaysAgo.getDate() - 2);
-    const staffCount = await User.countDocuments({});
+    
     const pendingCount = await Ticket.countDocuments({ currentAssignedTo: data._id, Bug_Status: "Pending" });
     const resolvedCount = await Ticket.countDocuments({ currentAssignedTo: data._id, Bug_Status: "Resolved" });
     const openCount = await Ticket.countDocuments({ currentAssignedTo: data._id, Bug_Status: "Open" });
-    const openSinceTwoDaysCount = await Ticket.countDocuments({
-      currentAssignedTo: data._id,
-      Bug_Status: "Open",
-      createdAt: { $lte: twoDaysAgo }
-    });
+    const HighPriorityCount = await Ticket.countDocuments({  currentAssignedTo: data._id,priority: "High" });
+    const LowPriorityCount = await Ticket.countDocuments({ currentAssignedTo: data._id, priority: "Low" });
+    const MidPriorityCount = await Ticket.countDocuments({  currentAssignedTo: data._id,priority: "Mid" });
+    
 
     return res.status(200).json({
       error: false,
       message: "Ticket status counts",
       data: {
-        Pending: pendingCount,
-        Resolved: resolvedCount,
-        Open: openCount,
-        OpenSinceLastTwoDays: openSinceTwoDaysCount,
-        staffCount
-      }
+        pendingCount,
+        resolvedCount,
+        openCount,
+       HighPriorityCount,
+       LowPriorityCount,
+       MidPriorityCount
+      },
     });
   } catch (err) {
     res.status(500).json({
