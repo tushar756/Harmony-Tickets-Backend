@@ -87,6 +87,111 @@ const staffOpenTickets = async (req, res) => {
     });
   }
 }
+const staffPendingTickets = async (req, res) => {
+  try {
+    // Assuming 'status' is the field representing the status of the ticket
+    const data = req.user;
+    const openTickets = await Ticket.find({ currentAssignedTo: data._id, Bug_Status: "Pending" })
+      .populate("currentAssignedTo")
+      .populate("createdBy");
+
+    return res.status(200).json({
+      error: false,
+      message: "Open tickets",
+      data: openTickets,
+    });
+  } catch (err) {
+    res.status(500).json({
+      error: true,
+      message: "Error retrieving open tickets",
+      data: null,
+    });
+  }
+}
+const staffResolveTickets = async (req, res) => {
+  try {
+    // Assuming 'status' is the field representing the status of the ticket
+    const data = req.user;
+    const openTickets = await Ticket.find({ currentAssignedTo: data._id, Bug_Status: "Resolve" })
+      .populate("currentAssignedTo")
+      .populate("createdBy");
+
+    return res.status(200).json({
+      error: false,
+      message: "Open tickets",
+      data: openTickets,
+    });
+  } catch (err) {
+    res.status(500).json({
+      error: true,
+      message: "Error retrieving open tickets",
+      data: null,
+    });
+  }
+}
+const staffHighPriorityTickets = async (req, res) => {
+  try {
+    // Assuming 'status' is the field representing the status of the ticket
+    const data = req.user;
+    const openTickets = await Ticket.find({ currentAssignedTo: data._id, priority: "High" })
+      .populate("currentAssignedTo")
+      .populate("createdBy");
+
+    return res.status(200).json({
+      error: false,
+      message: "Open tickets",
+      data: openTickets,
+    });
+  } catch (err) {
+    res.status(500).json({
+      error: true,
+      message: "Error retrieving open tickets",
+      data: null,
+    });
+  }
+}
+const staffMidPriorityTickets = async (req, res) => {
+  try {
+    // Assuming 'status' is the field representing the status of the ticket
+    const data = req.user;
+    const openTickets = await Ticket.find({ currentAssignedTo: data._id, priority: "High" })
+      .populate("currentAssignedTo")
+      .populate("createdBy");
+
+    return res.status(200).json({
+      error: false,
+      message: "Open tickets",
+      data: openTickets,
+    });
+  } catch (err) {
+    res.status(500).json({
+      error: true,
+      message: "Error retrieving open tickets",
+      data: null,
+    });
+  }
+}
+const staffLowPriorityTickets = async (req, res) => {
+  try {
+    // Assuming 'status' is the field representing the status of the ticket
+    const data = req.user;
+    const openTickets = await Ticket.find({ currentAssignedTo: data._id, priority: "Low" })
+      .populate("currentAssignedTo")
+      .populate("createdBy");
+
+    return res.status(200).json({
+      error: false,
+      message: "Open tickets",
+      data: openTickets,
+    });
+  } catch (err) {
+    res.status(500).json({
+      error: true,
+      message: "Error retrieving open tickets",
+      data: null,
+    });
+  }
+}
 const createReport = async (req, res) => {
   try {
     console.log("insede ")
@@ -139,4 +244,4 @@ const getAllReport = async (req,res)=>{
   }
 }
 
-module.exports = { staffTicket,counters,createReport,getAllReport,staffOpenTickets };
+module.exports = { staffTicket,counters,createReport,getAllReport,staffOpenTickets,staffPendingTickets,staffResolveTickets,staffHighPriorityTickets,staffMidPriorityTickets,staffLowPriorityTickets };
