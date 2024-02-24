@@ -93,7 +93,7 @@ const createTicket = async (req, res) => {
       media_url,
       ticketId,
       ...user._doc,
-      createdAt: moment().tz('Asia/Kolkata').format("lll"),
+      createdAt: moment().format("lll"),
     };
 
     createdTicket.transition.push({
