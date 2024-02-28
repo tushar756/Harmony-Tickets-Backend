@@ -8,10 +8,10 @@ const router = express.Router();
 const protect = require("../middleware/auth.js");
 const roleRouteAccess = require("../middleware/role_access.js");
 // import { getAllStaff } from "../controller/manager.js";
-router.use("/manager", roleRouteAccess,  managerRoute);
+router.use("/manager",protect,roleRouteAccess,  managerRoute);
  
 router.use("/ticket", Ticketrouter);
-router.use("/staff",   staffRouter); 
+router.use("/staff", protect, staffRouter); 
 
 // router.use("/staff",  staffRouter);
 router.use("/auth", authRouter);
