@@ -343,56 +343,6 @@ const getAllLowPriorityickets = async (req, res) => {
   }
 }
 
-const getAllStaffEbenezerTicket = async (req, res) => {
-  try {
-    const data = req.user;
- 
-    const allTicket = await Ticket.find({
-      currentAssignedTo: data._id,
-      // department: "Ebenezer Pharmacy"
-      $or: [
-        { department: "Ebenezer Pharmacy" }
-      ]
-    }).populate("currentAssignedTo")
-      .populate("createdBy");
 
-    res.status(200).json({
-      error: false,
-      data: allTicket,
-      message: "All tickets associated with the staff in Ebenezer Pharmacy department",
-    });
-  } catch (err) {
-    res.status(500).json({
-      error: true,
-      message: err.message,
-    });
-  }
-};
-const getAllStaffHarmonyTicket = async (req, res) => {
-  try {
-    const data = req.user;
- 
-    const allTicket = await Ticket.find({
-      currentAssignedTo: data._id,
-      // department: "Ebenezer Pharmacy"
-      $or: [
-        { department: "Ebenezer Pharmacy" },
-        { department: "Both" }
-      ]
-    }).populate("currentAssignedTo")
-      .populate("createdBy");
 
-    res.status(200).json({
-      error: false,
-      data: allTicket,
-      message: "All tickets associated with the staff in Ebenezer Pharmacy department",
-    });
-  } catch (err) {
-    res.status(500).json({
-      error: true,
-      message: err.message,
-    });
-  }
-};
-
-module.exports = { escaleticket, ticketHistory,statusCount ,getAllStaffEbenezerTicket,getAllStaffHarmonyTicket, getAllTicket,getAllOpenTickets,getAllPendingTickets,getAllResolvedTickets,getAllHighPriorityickets,getAllMidPriorityickets,getAllLowPriorityickets,getRaisedTicketsHistory,getAllEbenezerTicket,getAllHarmonyTicket};
+module.exports = { escaleticket, ticketHistory,statusCount  , getAllTicket,getAllOpenTickets,getAllPendingTickets,getAllResolvedTickets,getAllHighPriorityickets,getAllMidPriorityickets,getAllLowPriorityickets,getRaisedTicketsHistory,getAllEbenezerTicket,getAllHarmonyTicket};

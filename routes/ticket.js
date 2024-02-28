@@ -27,8 +27,7 @@ Ticketrouter.get("/totalMidPriorityTickets", getAllMidPriorityickets);
 Ticketrouter.get("/totalLowPriorityTickets", getAllLowPriorityickets);
 Ticketrouter.get("/getAllEbenezerTickets", getAllEbenezerTicket);
 Ticketrouter.get("/getAllHarmonyTickets", getAllHarmonyTicket);
-Ticketrouter.get("/getAllStaffEbenezerTickets", getAllStaffEbenezerTicket);
-Ticketrouter.get("/getAllStaffHarmonyTickets", getAllStaffHarmonyTicket);
+ 
 
 
 

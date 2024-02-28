@@ -4,11 +4,11 @@ const staffRouter = express.Router();
 
 // all ticket assoicated with the staff
 
-const { staffTicket, counters, createReport, getAllReport, staffOpenTickets, staffResolveTickets, staffHighPriorityTickets, staffMidPriorityTickets, staffLowPriorityTickets, staffPendingTickets, getRaisedTicketsHistory, updateStaff, getAllEbenezerTicket, getAllHarmonyTicket } = require("../controller/staff.js");
+const { staffTicket, counters, createReport, getAllReport, staffOpenTickets, staffResolveTickets, staffHighPriorityTickets, staffMidPriorityTickets, staffLowPriorityTickets, staffPendingTickets, getRaisedTicketsHistory, updateStaff,   getAllStaffEbenezerTicket, getAllStaffHarmonyTicket } = require("../controller/staff.js");
 
 staffRouter.get("/staffTickets", staffTicket);
-staffRouter.get("/getAllEbenezerTickets", getAllEbenezerTicket);
-staffRouter.get("/getAllHarmonyTickets", getAllHarmonyTicket);
+staffRouter.get("/getAllEbenezerTickets", getAllStaffEbenezerTicket);
+staffRouter.get("/getAllHarmonyTickets", getAllStaffHarmonyTicket);
 staffRouter.post("/createReport", createReport);
 staffRouter.get("/getAllReport", getAllReport);
 staffRouter.get("/counts", counters);
