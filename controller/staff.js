@@ -1,7 +1,7 @@
 const Report = require("../model/reports.js");
 const Ticket = require("../model/ticket.js");
 const User = require("../model/user.js");
-
+const bcrypt = require("bcrypt");
 const staffTicket = async (req, res) => {
   
   try {
@@ -279,7 +279,8 @@ const updateStaff = async (req, res) => {
     existingStaff.firstName = firstName;
     existingStaff.lastName = lastName;
     if (password) {
-      existingStaff.password = password;
+      const hashedPassword = await bcrypt.hash(password, 10);
+      existingStaff.password = hashedPassword;
     }
     existingStaff.role = role;
 

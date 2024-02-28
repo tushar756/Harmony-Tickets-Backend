@@ -3,8 +3,8 @@ const Ticket = require("../model/ticket.js");
 const User = require("../model/user.js");
 const Joi = require("joi");
 const moment = require("moment");
+const bcrypt = require("bcrypt");
 const createUser = async (req, res) => {
-  const bcrypt = require("bcrypt");
   try {
     const { error, value } = createUserValidation.validate(req.body);
     if (error) {
