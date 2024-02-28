@@ -247,7 +247,9 @@ const updateStaff = async (req, res) => {
     // Update the staff member's data
     existingStaff.firstName = firstName;
     existingStaff.lastName = lastName;
-    existingStaff.password = password;
+    if (password) {
+      existingStaff.password = password;
+    }
     existingStaff.role = role;
 
     // Save the updated staff member
