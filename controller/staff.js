@@ -308,9 +308,10 @@ const getAllEbenezerTicket = async (req, res) => {
  
     const allTicket = await Ticket.find({
       currentAssignedTo: data._id,
-      $or: [
-        { department: "Ebenezer Pharmacy" }
-      ]
+      department: "Ebenezer Pharmacy"
+      // $or: [
+      //   { department: "Ebenezer Pharmacy" }
+      // ]
     }).populate("currentAssignedTo")
       .populate("createdBy");
 
@@ -332,10 +333,11 @@ const getAllHarmonyTicket = async (req, res) => {
  
     const allTicket = await Ticket.find({
       currentAssignedTo: data._id,
-      $or: [
-        { department: "Ebenezer Pharmacy" },
-        { department: "Both" }
-      ]
+      department: "Ebenezer Pharmacy"
+      // $or: [
+      //   { department: "Ebenezer Pharmacy" },
+      //   { department: "Both" }
+      // ]
     }).populate("currentAssignedTo")
       .populate("createdBy");
 
