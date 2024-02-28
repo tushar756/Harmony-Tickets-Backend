@@ -331,7 +331,7 @@ const getAllStaffHarmonyTicket = async (req, res) => {
  
     // const allTicket = await Ticket.find({
     //   currentAssignedTo: data._id,
-    //   // department: "Ebenezer Pharmacy"
+    //   // 
     //   $or: [
     //     { department: "Ebenezer Pharmacy" },
     //     { department: "Both" }
@@ -339,7 +339,7 @@ const getAllStaffHarmonyTicket = async (req, res) => {
     // }).populate("currentAssignedTo")
     //   .populate("createdBy");
     const data = req.user;
-    const openTickets = await Ticket.find({ currentAssignedTo: data._id, Bug_Status: "Open" })
+    const openTickets = await Ticket.find({ currentAssignedTo: data._id, department: "Ebenezer Pharmacy" })
       .populate("currentAssignedTo")
       .populate("createdBy");
     res.status(200).json({
