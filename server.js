@@ -25,6 +25,7 @@ app.get("/",(req,res)=>{
 // }));
 app.use(express.urlencoded({ extended: true }));
 const router = require("./routes/index.js");
+const protect = require("./middleware/auth.js");
 app.use("/api",protect, router);
 app.use(fileUpload());
 app.get("/", function (req, res) {
