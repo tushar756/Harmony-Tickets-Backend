@@ -302,57 +302,6 @@ const updateStaff = async (req, res) => {
     });
   }
 };
-const getAllEbenezerTicket = async (req, res) => {
-  try {
-    const data = req.user;
- 
-    const allTicket = await Ticket.find({
-      currentAssignedTo: data._id,
-      department: "Ebenezer Pharmacy"
-      // $or: [
-      //   { department: "Ebenezer Pharmacy" }
-      // ]
-    }).populate("currentAssignedTo")
-      .populate("createdBy");
-
-    res.status(200).json({
-      error: false,
-      data: allTicket,
-      message: "All tickets associated with the staff in Ebenezer Pharmacy department",
-    });
-  } catch (err) {
-    res.status(500).json({
-      error: true,
-      message: err.message,
-    });
-  }
-};
-const getAllHarmonyTicket = async (req, res) => {
-  try {
-    const data = req.user;
- 
-    const allTicket = await Ticket.find({
-      currentAssignedTo: data._id,
-      department: "Ebenezer Pharmacy"
-      // $or: [
-      //   { department: "Ebenezer Pharmacy" },
-      //   { department: "Both" }
-      // ]
-    }).populate("currentAssignedTo")
-      .populate("createdBy");
-
-    res.status(200).json({
-      error: false,
-      data: allTicket,
-      message: "All tickets associated with the staff in Ebenezer Pharmacy department",
-    });
-  } catch (err) {
-    res.status(500).json({
-      error: true,
-      message: err.message,
-    });
-  }
-};
 
 
 module.exports = { staffTicket,counters,createReport,getAllReport,getAllHarmonyTicket,getAllEbenezerTicket,updateStaff,staffOpenTickets,staffPendingTickets,staffResolveTickets,staffHighPriorityTickets,staffMidPriorityTickets,staffLowPriorityTickets,getRaisedTicketsHistory };
