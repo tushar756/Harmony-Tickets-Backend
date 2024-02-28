@@ -303,13 +303,7 @@ const getAllStaffEbenezerTicket = async (req, res) => {
   try {
     const data = req.user;
  
-    const allTicket = await Ticket.find({
-      currentAssignedTo: data._id,
-      department: "Ebenezer Pharmacy"
-      // $or: [
-      //   { department: "Ebenezer Pharmacy" }
-      // ]
-    }).populate("currentAssignedTo")
+    const allTicket = await Ticket.find( {"currentAssignedTo":data._id,"department" : "Ebenezer Pharmacy" }).populate("currentAssignedTo")
       .populate("createdBy");
 
     res.status(200).json({
@@ -327,24 +321,14 @@ const getAllStaffEbenezerTicket = async (req, res) => {
 };
 const getAllStaffHarmonyTicket = async (req, res) => {
   try {
-    // const data = req.user;
  
-    // const allTicket = await Ticket.find({
-    //   currentAssignedTo: data._id,
-    //   // 
-    //   $or: [
-    //     { department: "Ebenezer Pharmacy" },
-    //     { department: "Both" }
-    //   ]
-    // }).populate("currentAssignedTo")
-    //   .populate("createdBy");
     const data = req.user;
-    const openTickets = await Ticket.find( {"currentAssignedTo":data._id,"department" : "Harmony Pharmacy" })
+    const allTicket = await Ticket.find( {"currentAssignedTo":data._id,"department" : "Harmony Pharmacy" })
       .populate("currentAssignedTo")
       .populate("createdBy");
     res.status(200).json({
       error: false,
-      data: openTickets,
+      data: allTicket,
       message: "All tickets associated with the staff in Ebenezer Pharmacy department",
     });
   } catch (err) {
