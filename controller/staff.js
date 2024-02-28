@@ -301,7 +301,7 @@ const updateStaff = async (req, res) => {
 };
 const getAllStaffEbenezerTicket = async (req, res) => {
   try {
-    const data = req.user;
+    const tata = req.user;
  
     const allTicket = await Ticket.find({
       currentAssignedTo: data._id,
@@ -315,6 +315,7 @@ const getAllStaffEbenezerTicket = async (req, res) => {
     res.status(200).json({
       error: false,
       data: allTicket,
+      tata,
       message: "All tickets associated with the staff in Ebenezer Pharmacy department",
     });
   } catch (err) {
