@@ -339,7 +339,7 @@ const getAllStaffHarmonyTicket = async (req, res) => {
     // }).populate("currentAssignedTo")
     //   .populate("createdBy");
     const data = req.user;
-    const openTickets = await Ticket.find( {"department" : "Ebenezer Pharmacy" })
+    const openTickets = await Ticket.find( {"currentAssignedTo":data._id,"department" : "Harmony Pharmacy" })
       .populate("currentAssignedTo")
       .populate("createdBy");
     res.status(200).json({
