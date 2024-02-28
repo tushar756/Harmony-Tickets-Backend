@@ -344,7 +344,7 @@ const getAllStaffHarmonyTicket = async (req, res) => {
       .populate("createdBy");
     res.status(200).json({
       error: false,
-      data: allTicket,
+      data: openTickets,
       message: "All tickets associated with the staff in Ebenezer Pharmacy department",
     });
   } catch (err) {
