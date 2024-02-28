@@ -228,7 +228,56 @@ const escaleticket = async (req, res) => {
   }
 };
 
-const updateStaff = async (req, res) => {};
+
+const updateStaff = async (req, res) => {
+  const { email, firstName, lastName, password, role } = req.body;
+
+  try {
+    // Find the existing staff member by email
+    const existingStaff = await User.findOne({ email });
+
+    // If staff member doesn't exist, return an error
+    if (!existingStaff) {
+      return res.status(404).json({
+        error: true,
+        message: "Staff member not found",
+      });
+    }
+
+    // Update the staff member's data
+    existingStaff.firstName = firstName;
+    existingStaff.lastName = lastName;
+    existingStaff.password = password;
+    existingStaff.role = role;
+
+    // Save the updated staff member
+    await existingStaff.save();
+
+    // Return success response
+    res.status(200).json({
+      error: false,
+      message: "Staff member updated successfully",
+      data: existingStaff,
+    });
+  } catch (error) {
+    // Handle any errors that occur during the update process
+    console.error("Error updating staff member:", error);
+    res.status(500).json({
+      error: true,
+      message: "An error occurred while updating staff member",
+    });
+  }
+};
+
+
+
+
+
+
+
+
+
+
 const deleteStaff = async (req, res) => {
   const { email } = req.body;
   const existingStaff = await User.findOne({ email });
