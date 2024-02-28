@@ -309,8 +309,7 @@ const getAllEbenezerTicket = async (req, res) => {
     const allTicket = await Ticket.find({
       currentAssignedTo: data._id,
       $or: [
-        { department: "Ebenezer Pharmacy" },
-        { department: "Both" }
+        { department: "Ebenezer Pharmacy" }
       ]
     }).populate("currentAssignedTo")
       .populate("createdBy");
