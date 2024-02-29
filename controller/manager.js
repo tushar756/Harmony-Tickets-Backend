@@ -53,8 +53,14 @@ const createTicket = async (req, res) => {
     //     message: error.message,
     //   });
     // }
+    let currentIndex = 1000; // Initialize index to start from 1000
 
-    const ticketId = Math.floor(1000 + Math.random() * 9000);
+    function getNextIndex() {
+      const nextIndex = currentIndex;
+      currentIndex++; // Increment the index for the next call
+      return nextIndex;
+    }
+    const ticketId = getNextIndex();
 
     const existingTicket = await Ticket.findOne({
       ticketId,
@@ -84,7 +90,8 @@ const createTicket = async (req, res) => {
       _id,
     });
 
-    const { description, Bug_Status, priority, media_url,department } = createdTicket;
+    const { description, Bug_Status, priority, media_url, department } =
+      createdTicket;
     const newObj = {
       department,
       description,
@@ -228,7 +235,6 @@ const escaleticket = async (req, res) => {
   }
 };
 
-
 const updateStaff = async (req, res) => {
   const { email, firstName, lastName, password, role } = req.body;
 
@@ -270,15 +276,6 @@ const updateStaff = async (req, res) => {
     });
   }
 };
-
-
-
-
-
-
-
-
-
 
 const deleteStaff = async (req, res) => {
   const { email } = req.body;
