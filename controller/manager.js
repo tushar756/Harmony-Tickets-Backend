@@ -344,6 +344,7 @@ const createTicketValidation = Joi.object({
   title: Joi.string().required(),
   // media_url: Joi.string().required(),
   description: Joi.string().required(),
+  department:Joi.string().required().valid("Harmony Pharmacy", "Ebenezer Pharmacy", "Both"),
   priority: Joi.string().valid("High", "Mid", "Low").required(),
   Bug_Status: Joi.string().required(),
   currentAssignedTo: Joi.string().required(),
