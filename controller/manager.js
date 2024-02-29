@@ -4,6 +4,9 @@ const User = require("../model/user.js");
 const Joi = require("joi");
 const moment = require("moment");
 const bcrypt = require("bcrypt");
+
+
+
 const createUser = async (req, res) => {
   try {
     const { error, value } = createUserValidation.validate(req.body);
@@ -39,20 +42,19 @@ const createUser = async (req, res) => {
     });
   }
 };
-
 const createTicket = async (req, res) => {
   try {
     console.log(req.body);
 
     const { _id } = req.user;
-    const value = req.body;
-    // const { error, value } = createTicketValidation.validate(req.body);
-    // if (error) {
-    //   return res.status(400).json({
-    //     error: false,
-    //     message: error.message,
-    //   });
-    // }
+    // const value = req.body;
+    const { error, value } = createTicketValidation.validate(req.body);
+    if (error) {
+      return res.status(400).json({
+        error: false,
+        message: error.message,
+      });
+    }
     
     let ticketId;
     let existingTicket;
@@ -224,8 +226,6 @@ const escaleticket = async (req, res) => {
     });
   }
 };
-
-
 const updateStaff = async (req, res) => {
   const { email, firstName, lastName, password, role } = req.body;
 
@@ -267,16 +267,6 @@ const updateStaff = async (req, res) => {
     });
   }
 };
-
-
-
-
-
-
-
-
-
-
 const deleteStaff = async (req, res) => {
   const { email } = req.body;
   const existingStaff = await User.findOne({ email });
@@ -291,7 +281,6 @@ const deleteStaff = async (req, res) => {
     .status(201)
     .send({ data: response, message: "Staff Deleted Succesfully" });
 };
-
 const getAllStaff = async (req, res) => {
   try {
     // console.log()
@@ -307,7 +296,6 @@ const getAllStaff = async (req, res) => {
     });
   }
 };
-
 const createReport = async (req, res) => {
   try {
     const { _id } = req.user;
