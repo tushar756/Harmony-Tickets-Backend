@@ -339,6 +339,7 @@ const createUserValidation = Joi.object({
   email: Joi.string().email().required(),
   role: Joi.string().valid("manager", "staff").required(),
 });
+   
 
 const createTicketValidation = Joi.object({
   title: Joi.string().required(),
