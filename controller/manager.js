@@ -347,7 +347,6 @@ const createTicketValidation = Joi.object({
   priority: Joi.string().valid("High", "Mid", "Low").required(),
   Bug_Status: Joi.string().required(),
   currentAssignedTo: Joi.string().required(),
-  file: Joi.string()
-    .required()
-    .regex(/\.(pdf|doc|docx|jpg|png)$/i), // Validate file extension
-});
+  // file: Joi.string().required().regex(/\.(pdf|doc|docx|jpg|png)$/i), 
+})
+;
