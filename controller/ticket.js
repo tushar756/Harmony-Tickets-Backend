@@ -143,9 +143,18 @@ const statusCount = async (req, res) => {
     const pendingCount = await Ticket.countDocuments({ Bug_Status: "Pending" });
     const resolvedCount = await Ticket.countDocuments({ Bug_Status: "Resolved" });
     const openCount = await Ticket.countDocuments({ Bug_Status: "Open" });
-    const HighPriorityCount = await Ticket.countDocuments({ priority: "High" });
-    const LowPriorityCount = await Ticket.countDocuments({ priority: "Low" });
-    const MidPriorityCount = await Ticket.countDocuments({ priority: "Mid" });
+    const HighPriorityCount = await Ticket.countDocuments({ priority: "High" ,$or: [
+      { Bug_Status: "Open" },
+      { Bug_Status: "Pending" }
+  ]});
+    const LowPriorityCount = await Ticket.countDocuments({ priority: "Low" ,$or: [
+      { Bug_Status: "Open" },
+      { Bug_Status: "Pending" }
+  ]});
+    const MidPriorityCount = await Ticket.countDocuments({ priority: "Mid",$or: [
+      { Bug_Status: "Open" },
+      { Bug_Status: "Pending" }
+  ] });
 
     return res.status(200).json({
       error: false,
@@ -308,7 +317,10 @@ const getAllHighPriorityickets = async (req, res) => {
 const getAllMidPriorityickets = async (req, res) => {
   try {
     // Assuming 'status' is the field representing the status of the ticket
-    const openTickets = await Ticket.find({ priority: "Mid" })
+    const openTickets = await Ticket.find({ priority: "Mid",$or: [
+      { Bug_Status: "Open" },
+      { Bug_Status: "Pending" }
+  ] })
       .populate("currentAssignedTo")
       .populate("createdBy");
 
@@ -328,7 +340,10 @@ const getAllMidPriorityickets = async (req, res) => {
 const getAllLowPriorityickets = async (req, res) => {
   try {
     // Assuming 'status' is the field representing the status of the ticket
-    const openTickets = await Ticket.find({ priority: "Low" })
+    const openTickets = await Ticket.find({ priority: "Low",$or: [
+      { Bug_Status: "Open" },
+      { Bug_Status: "Pending" }
+  ] })
       .populate("currentAssignedTo")
       .populate("createdBy");
 
