@@ -38,9 +38,18 @@ const counters = async (req, res) => {
     const pendingCount = await Ticket.countDocuments({ currentAssignedTo: data._id, Bug_Status: "Pending" });
     const resolvedCount = await Ticket.countDocuments({ currentAssignedTo: data._id, Bug_Status: "Resolved" });
     const openCount = await Ticket.countDocuments({ currentAssignedTo: data._id, Bug_Status: "Open" });
-    const HighPriorityCount = await Ticket.countDocuments({  currentAssignedTo: data._id,priority: "High" });
-    const LowPriorityCount = await Ticket.countDocuments({ currentAssignedTo: data._id, priority: "Low" });
-    const MidPriorityCount = await Ticket.countDocuments({  currentAssignedTo: data._id,priority: "Mid" });
+    const HighPriorityCount = await Ticket.countDocuments({  currentAssignedTo: data._id,priority: "High",$or: [
+      { Bug_Status: "Open" },
+      { Bug_Status: "Pending" }
+  ] });
+    const LowPriorityCount = await Ticket.countDocuments({ currentAssignedTo: data._id, priority: "Low",$or: [
+      { Bug_Status: "Open" },
+      { Bug_Status: "Pending" }
+  ] });
+    const MidPriorityCount = await Ticket.countDocuments({  currentAssignedTo: data._id,priority: "Mid",$or: [
+      { Bug_Status: "Open" },
+      { Bug_Status: "Pending" }
+  ] });
     
 
     return res.status(200).json({
@@ -130,7 +139,10 @@ const staffHighPriorityTickets = async (req, res) => {
   try {
     // Assuming 'status' is the field representing the status of the ticket
     const data = req.user;
-    const openTickets = await Ticket.find({ currentAssignedTo: data._id, priority: "High" })
+    const openTickets = await Ticket.find({ currentAssignedTo: data._id, priority: "High",$or: [
+      { Bug_Status: "Open" },
+      { Bug_Status: "Pending" }
+  ] })
       .populate("currentAssignedTo")
       .populate("createdBy");
 
@@ -151,7 +163,10 @@ const staffMidPriorityTickets = async (req, res) => {
   try {
     // Assuming 'status' is the field representing the status of the ticket
     const data = req.user;
-    const openTickets = await Ticket.find({ currentAssignedTo: data._id, priority: "High" })
+    const openTickets = await Ticket.find({ currentAssignedTo: data._id, priority: "High",$or: [
+      { Bug_Status: "Open" },
+      { Bug_Status: "Pending" }
+  ] })
       .populate("currentAssignedTo")
       .populate("createdBy");
 
@@ -172,7 +187,10 @@ const staffLowPriorityTickets = async (req, res) => {
   try {
     // Assuming 'status' is the field representing the status of the ticket
     const data = req.user;
-    const openTickets = await Ticket.find({ currentAssignedTo: data._id, priority: "Low" })
+    const openTickets = await Ticket.find({ currentAssignedTo: data._id, priority: "Low",$or: [
+      { Bug_Status: "Open" },
+      { Bug_Status: "Pending" }
+  ] })
       .populate("currentAssignedTo")
       .populate("createdBy");
 
