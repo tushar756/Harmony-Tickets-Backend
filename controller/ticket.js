@@ -285,7 +285,10 @@ const getAllResolvedTickets = async (req, res) => {
 const getAllHighPriorityickets = async (req, res) => {
   try {
     // Assuming 'status' is the field representing the status of the ticket
-    const openTickets = await Ticket.find({ priority: "High" })
+    const openTickets = await Ticket.find({ priority: "High", $or: [
+      { Bug_Status: "Open" },
+      { Bug_Status: "Pending" }
+  ] })
       .populate("currentAssignedTo")
       .populate("createdBy");
 
