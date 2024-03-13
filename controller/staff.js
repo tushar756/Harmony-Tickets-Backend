@@ -163,7 +163,7 @@ const staffMidPriorityTickets = async (req, res) => {
   try {
     // Assuming 'status' is the field representing the status of the ticket
     const data = req.user;
-    const openTickets = await Ticket.find({ currentAssignedTo: data._id, priority: "High",$or: [
+    const openTickets = await Ticket.find({ currentAssignedTo: data._id, priority: "Mid",$or: [
       { Bug_Status: "Open" },
       { Bug_Status: "Pending" }
   ] })
